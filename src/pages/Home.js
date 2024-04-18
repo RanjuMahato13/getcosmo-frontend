@@ -8,7 +8,7 @@ import Container from "../components/Container";
 import moment from "moment";
 import prodcompare from "../images/prodcompare.svg";
 import wish from "../images/wish.svg";
-import  addcart from "../images/add-cart.svg";
+import addcart from "../images/add-cart.svg";
 import view from "../images/view.svg";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllBlogs } from "../features/blogs/blogSlice";
@@ -172,15 +172,12 @@ const Home = () => {
           <div className="col-12">
             <h3 className="section-heading">Featured Collections</h3>
           </div>
-           {productState &&
+          {productState &&
             productState?.map((item, index) => {
               if (item.tags === "featured") {
                 return (
                   <div key={index} className={"col-3"}>
-                    <div
-                     
-                      className="product-card position-relative"
-                    >
+                    <div className="product-card position-relative">
                       <div className="wishlist-icon position-absolute">
                         <button
                           className="border-0 bg-transparent"
@@ -209,7 +206,11 @@ const Home = () => {
                       </div>
                       <div className="product-details">
                         <h6 className="brand">{item?.brand}</h6>
-                        <h5 className="product-title">{item?.title}</h5>
+                        <h5 className="product-title">
+                          {item?.title?.length > 31
+                            ? item?.title.substring(0, 30) + "..."
+                            : item?.title}
+                        </h5>
                         <ReactStars
                           count={5}
                           size={24}
@@ -225,7 +226,11 @@ const Home = () => {
                             <img src={prodcompare} alt="compare" />
                           </button> */}
                           <button className="border-0 bg-transparent">
-                            <img onClick={() => navigate("/product/"+item?._id)}  src={view} alt="view" />
+                            <img
+                              onClick={() => navigate("/product/" + item?._id)}
+                              src={view}
+                              alt="view"
+                            />
                           </button>
                           {/* <button className="border-0 bg-transparent">
                             <img src={addcart} alt="addcart" />
@@ -278,10 +283,7 @@ const Home = () => {
               if (item.tags === "popular") {
                 return (
                   <div key={index} className={"col-3"}>
-                    <div
-              
-                      className="product-card position-relative"
-                    >
+                    <div className="product-card position-relative">
                       <div className="wishlist-icon position-absolute">
                         <button
                           className="border-0 bg-transparent"
@@ -326,7 +328,11 @@ const Home = () => {
                             <img src={prodcompare} alt="compare" />
                           </button> */}
                           <button className="border-0 bg-transparent">
-                            <img onClick={()=>navigate("/product/"+item?._id)} src={view} alt="view" />
+                            <img
+                              onClick={() => navigate("/product/" + item?._id)}
+                              src={view}
+                              alt="view"
+                            />
                           </button>
                           {/* <button className="border-0 bg-transparent">
                             <img src={addcart} alt="addcart" />
