@@ -4,15 +4,18 @@ import { BsSearch } from "react-icons/bs";
 import { useDispatch, useSelector } from "react-redux";
 import { Typeahead } from "react-bootstrap-typeahead";
 import "react-bootstrap-typeahead/css/Typeahead.css";
-import { getAProduct } from "../features/products/productSlice";
+import { getAProduct, getAllProducts } from "../features/products/productSlice";
+
 const Header = () => {
   const dispatch = useDispatch();
+  const [categories, setCategories] = useState([]);
+  const [category, setCategory] = useState([null]);
   const cartState = useSelector((state) => state?.auth?.cartProducts);
   const authState = useSelector((state) => state?.auth);
   const productState = useSelector((state) => state?.product?.product);
   const [productOpt, setProductOpt] = useState([]);
   const [paginate, setPaginate] = useState(true);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const [total, setTotal] = useState(null);
   useEffect(() => {
@@ -26,12 +29,22 @@ const Header = () => {
   }, [cartState]);
   useEffect(() => {
     let data = [];
+    let category = [];
+
     for (let index = 0; index < productState.length; index++) {
       const element = productState[index];
+      category.push(element.category);
       data.push({ id: index, prod: element?._id, name: element?.title });
     }
+    setCategories(category);
     setProductOpt(data);
   }, [productState]);
+  const getProducts = () => {
+    dispatch(getAllProducts({ category }));
+  };
+  useEffect(() => {
+    getProducts();
+  }, [category]);
 
   const handleLogout = () => {
     localStorage.clear();
@@ -72,13 +85,13 @@ const Header = () => {
                   id="pagination-example"
                   onPaginate={() => console.log("Results paginated")}
                   onChange={(selected) => {
-                    navigate(`/product/${selected[0]?.prod}`)
-                    dispatch(getAProduct(selected[0]?.prod))
+                    navigate(`/product/${selected[0]?.prod}`);
+                    dispatch(getAProduct(selected[0]?.prod));
                   }}
                   options={productOpt}
                   paginate={paginate}
                   labelKey={"name"}
-                  minLength={2}   // product j j xa tai matrw auna lai garey ko
+                  minLength={2} // product j j xa tai matrw auna lai garey ko
                   placeholder="Search for Products here..."
                 />
                 <span className="input-group-text" id="basic-addon2">
@@ -165,7 +178,15 @@ const Header = () => {
                       className="dropdown-menu"
                       arial-labelledby="dropdownMenuButton1"
                     >
-                      <li>
+                      {categories &&
+                        [...new Set(categories)].map((item, index) => {
+                          return (
+                            <li key={index} onClick={() => setCategory(item)}>
+                              {item}
+                            </li>
+                          );
+                        })}
+                      {/* <li>
                         <a className="dropdown-item" href="#">
                           Face Makeup
                         </a>
@@ -179,7 +200,7 @@ const Header = () => {
                         <a className="dropdown-item" href="#">
                           Hair Care
                         </a>
-                      </li>
+                      </li> */}
                     </ul>
                   </div>
                 </div>

@@ -34,6 +34,10 @@ const Home = () => {
   const addToWish = (id) => {
     dispatch(addToWishlist(id));
   };
+  const handleShopNow = (tag) => {
+    getallProducts({ tag });
+    navigate("/product?tag=" + tag);
+  };
   return (
     <>
       <Container class1="home-wrapper-1 py-5">
@@ -48,7 +52,12 @@ const Home = () => {
               <div className="main-banner-content position-absolute">
                 <h5>Cosmetics-in-offer</h5>
                 <p>Save more with coupons & up to 70% off!</p>
-                <Link className="button">SHOP NOW</Link>
+                <button
+                  className="button"
+                  onClick={() => handleShopNow("offer")}
+                >
+                  SHOP NOW
+                </button>
               </div>
             </div>
           </div>
@@ -61,9 +70,14 @@ const Home = () => {
                   alt="main banner"
                 />
                 <div className="small-banner-content position-absolute">
-                  <h5>Cosmetics-in-offer</h5>
+                  <h5>Cosmetics-in-popular</h5>
                   <p>Save more with coupons & up to 70% off!</p>
-                  <Link className="button">SHOP NOW</Link>
+                  <button
+                    className="button"
+                    onClick={() => handleShopNow("popular")}
+                  >
+                    SHOP NOW
+                  </button>
                 </div>
               </div>
             </div>

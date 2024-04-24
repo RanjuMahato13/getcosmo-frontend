@@ -6,43 +6,54 @@ import ProductCard from "../components/ProductCard";
 import Container from "../components/Container";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllProducts } from "../features/products/productSlice";
+import { useLocation, useParams } from "react-router-dom";
 
 const OurProduct = (props) => {
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const searchTag = searchParams.get("tag");
   const [grid, setGrid] = useState(4);
   const productState = useSelector((state) => state?.product?.product);
-  const [brands, setBrands] = useState([])
-  const [categories, setCategories] = useState([])
-  const [tags, setTags] = useState([])
-  
+  const [brands, setBrands] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [tags, setTags] = useState([]);
+
   // Filter States
-  const [tag, setTag] = useState([null])
-  const [category, setCategory] = useState([null])
-  const [brand, setBrand] = useState([null])
-  const [sort, setSort] = useState([null])
+  const [tag, setTag] = useState([null]);
+  const [category, setCategory] = useState([null]);
+  const [brand, setBrand] = useState([null]);
+  const [sort, setSort] = useState([null]);
 
   useEffect(() => {
-    let newBrands =[];
-    let category =[];
-    let newtags =[];
+    let newBrands = [];
+    let category = [];
+    let newtags = [];
     for (let index = 0; index < productState?.length; index++) {
       const element = productState[index];
-      newBrands.push(element.brand)
-      category.push(element.category)
-      newtags.push(element.tags)
+      newBrands.push(element.brand);
+      category.push(element.category);
+      newtags.push(element.tags);
     }
-    setBrands(newBrands)
-    setCategories(category)
-    setTags(newtags)
-  }, [productState])
+    setBrands(newBrands);
+    setCategories(category);
+    setTags(newtags);
+  }, [productState]);
   //console.log([...new Set(brands)], [...new Set(categories)], [...new Set(tags)]);
 
   const dispatch = useDispatch();
   useEffect(() => {
     getProducts();
-  }, [sort,tag,brand,category]);
+  }, [sort, tag, brand, category]);
+
   const getProducts = () => {
-    dispatch(getAllProducts({sort,tag,brand,category}));
+    dispatch(getAllProducts({ sort, tag, brand, category }));
   };
+
+  useEffect(() => {
+    if (searchTag) {
+      setTag(searchTag);
+    }
+  }, []);
 
   return (
     <>
@@ -55,15 +66,18 @@ const OurProduct = (props) => {
               <h3 className="filter-title">Shop By Categories</h3>
               <div>
                 <ul className="ps-0">
-                {
-                  categories && [...new Set(categories)].map((item, index) => {
-                    return <li key={index} onClick={() => setCategory(item)}>{item}</li>
-                  })
-                }
-                  <li>Face Makeup</li>
+                  {categories &&
+                    [...new Set(categories)].map((item, index) => {
+                      return (
+                        <li key={index} onClick={() => setCategory(item)}>
+                          {item}
+                        </li>
+                      );
+                    })}
+                  {/* <li>Face Makeup</li>
                   <li>Skin Care</li>
                   <li>Hair Care</li>
-                  <li>Accessories</li>
+                  <li>Accessories</li> */}
                 </ul>
               </div>
             </div>
@@ -101,13 +115,18 @@ const OurProduct = (props) => {
               <h3 className="filter-title">Products Tags</h3>
               <div>
                 <div className="product-tags d-flex flex-wrap align-items-center gap-10">
-                {
-                  tags && [...new Set(tags)].map((item, index) => {
-                    return (<span onClick={() => setTag(item)} key={index} className="text-capitalize badge bg-light text-secondary rounded-3 py-2 px-3">
-                   {item}
-                  </span>)
-                  })
-                }
+                  {tags &&
+                    [...new Set(tags)].map((item, index) => {
+                      return (
+                        <span
+                          onClick={() => setTag(item)}
+                          key={index}
+                          className="text-capitalize badge bg-light text-secondary rounded-3 py-2 px-3"
+                        >
+                          {item}
+                        </span>
+                      );
+                    })}
                 </div>
               </div>
             </div>
@@ -115,13 +134,18 @@ const OurProduct = (props) => {
               <h3 className="filter-title">Product Brands</h3>
               <div>
                 <div className="product-tags d-flex flex-wrap align-items-center gap-10">
-                {
-                  brands && [...new Set(brands)].map((item, index) => {
-                    return (<span onClick={() => setBrand(item)} key={index} className="text-capitalize badge bg-light text-secondary rounded-3 py-2 px-3">
-                   {item}
-                  </span>)
-                  })
-                }
+                  {brands &&
+                    [...new Set(brands)].map((item, index) => {
+                      return (
+                        <span
+                          onClick={() => setBrand(item)}
+                          key={index}
+                          className="text-capitalize badge bg-light text-secondary rounded-3 py-2 px-3"
+                        >
+                          {item}
+                        </span>
+                      );
+                    })}
                 </div>
               </div>
             </div>
@@ -133,17 +157,14 @@ const OurProduct = (props) => {
                   <p className="mb-0 d-block" style={{ width: "100px" }}>
                     Sort By:
                   </p>
-                  <select 
-                      name="" 
-                      className="form-control form-select" 
-                      id="" 
-                      onChange={(e) => setSort(e.target.value)}
-                    >
-                    
+                  <select
+                    name=""
+                    className="form-control form-select"
+                    id=""
+                    onChange={(e) => setSort(e.target.value)}
+                  >
                     <option value="title">Alphabetically, A-Z</option>
-                    <option value="-title">
-                      Alphabetically, A-Z
-                    </option>
+                    <option value="-title">Alphabetically, A-Z</option>
                     <option value="price">Price, low to high</option>
                     <option value="-price">Price, high to low</option>
                     <option value="createdAt">Date, old to new</option>
@@ -191,7 +212,10 @@ const OurProduct = (props) => {
             </div>
             <div className="products-list pb-5">
               <div className="d-flex gap-10 flex-wrap">
-                <ProductCard data={productState ? productState: []} grid={grid} />
+                <ProductCard
+                  data={productState ? productState : []}
+                  grid={grid}
+                />
               </div>
             </div>
           </div>
