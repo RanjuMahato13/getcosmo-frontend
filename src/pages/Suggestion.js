@@ -1,5 +1,7 @@
 import { useFormik } from "formik";
 import * as yup from "yup";
+import { useDispatch, useSelector } from "react-redux";
+import { createSuggestion } from "../features/suggestion/suggestionSlice";
 
 const suggestionSchema = yup.object({
   name: yup.string().required("Name is Required"),
@@ -21,6 +23,8 @@ const suggestionSchema = yup.object({
 });
 
 export default function Sugggestion() {
+  const dispatch = useDispatch();
+  const { isLoading } = useSelector((state) => state.suggestion.isLoading);
   const formik = useFormik({
     initialValues: {
       name: "",
@@ -29,15 +33,16 @@ export default function Sugggestion() {
       suggestion: "",
     },
     validationSchema: suggestionSchema,
-    onSubmit: (values) => {
-      //   dispatch(
-      //     createQuery({
-      //       name: values.name,
-      //       email: values.email,
-      //       mobile: values.mobile,
-      //       suggestion: values.suggestion,
-      //     })
-      //   );
+    onSubmit: (values, { resetForm }) => {
+      dispatch(
+        createSuggestion({
+          name: values.name,
+          email: values.email,
+          mobile: values.mobile,
+          suggestion: values.suggestion,
+        })
+      );
+      resetForm();
     },
   });
   return (
@@ -110,7 +115,13 @@ export default function Sugggestion() {
               </textarea>
             </div>
             <div>
-              <button className="button border-0">Submit</button>
+              <button
+                className="button border-0"
+                type="submit"
+                disabled={isLoading}
+              >
+                Submit
+              </button>
             </div>
           </form>
         </div>
