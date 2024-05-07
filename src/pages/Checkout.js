@@ -1,12 +1,12 @@
 import React, {useEffect, useState} from "react";
-import { Link, resolvePath } from "react-router-dom";
+import { Link, resolvePath, useNavigate } from "react-router-dom";
 import { BiArrowBack } from "react-icons/bi";
-import foundation from "../images/foundation.jpeg";
 import Container from "../components/Container";
 import {useDispatch, useSelector} from "react-redux";
 import {useFormik} from 'formik';
 import * as yup from "yup";
 import axios from "axios";
+import { getUserCart } from "../features/user/userSlice";
 
 const deliverySchema = yup.object({
  firstName: yup.string().required("First Name is Required"),
@@ -19,9 +19,12 @@ const deliverySchema = yup.object({
 const Checkout = () => {
   const dispatch = useDispatch();
   const cartState = useSelector(state => state.auth.cartProducts)
+  const authState = useSelector(state => state.auth)
   const [totalAmount, setTotalAmount] = useState(null);
   const [deliveryInfo, setDeliveryInfo] = useState(null);
-
+  //const [cartProductState, setCartProductState] = useState([])
+  const navigate = useNavigate();
+  
   useEffect(() => {
     let sum = 0;
     for (let index = 0; index < cartState?.length; index++) {
@@ -29,6 +32,24 @@ const Checkout = () => {
      setTotalAmount(sum);
     }
   },[cartState])
+  const getTokenFromLocalStorage = localStorage.getItem("customer")
+  ? JSON.parse(localStorage.getItem("customer"))
+  : null;
+
+const config2 = {
+  headers: {
+    Authorization: `Bearer ${
+      getTokenFromLocalStorage !== null ? getTokenFromLocalStorage.token : ""
+    }`,
+    Accept: "application/json",
+  },
+};
+
+  useEffect (() => {
+    if (authState?.orderedProduct?.order !== null && authState?.orderedProduuct?.success == true){
+      navigate("/my-orders")
+    }
+  }, [authState])
     const formik = useFormik({
         initialValues: {
           firstName: "",
@@ -38,9 +59,12 @@ const Checkout = () => {
           city: "",
         },
         validationSchema: deliverySchema,
-        onSubmit: (values) => {
-         alert(JSON.stringify(values))
-         setDeliveryInfo(values)
+        onSubmit: async (values) => {
+        alert(JSON.stringify(values))
+          await setDeliveryInfo(values)
+        //  setTimeout(() => {
+        //   checkOutHandler()
+        //  }, 300);
         },
   });
   
@@ -132,6 +156,12 @@ const Checkout = () => {
                     </option>
                     <option value="" >
                       Bhaktapur
+                    </option>
+                    <option value="" >
+                     Chitwan
+                    </option>
+                    <option value="" >
+                      Pokhara
                     </option>
                   </select>
                   <div className="error ms-2 my-1">

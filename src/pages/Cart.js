@@ -12,12 +12,24 @@ import {
   updateCartProduct,
 } from "../features/user/userSlice";
 const Cart = () => {
+  const getTokenFromLocalStorage = localStorage.getItem("customer")
+  ? JSON.parse(localStorage.getItem("customer"))
+  : null;
+
+const config2 = {
+  headers: {
+    Authorization: `Bearer ${
+      getTokenFromLocalStorage !== null ? getTokenFromLocalStorage.token : ""
+    }`,
+    Accept: "application/json",
+  },
+};
   const dispatch = useDispatch();
   const [productUpdateDetail, setProductUpdateDetail] = useState(null);
   const [totalAmount, setTotalAmount] = useState(null);
   const userCartState = useSelector((state) => state.auth.cartProducts);
   useEffect(() => {
-    dispatch(getUserCart());
+    dispatch(getUserCart(config2));
   }, []);
   useEffect(() => {
     if (productUpdateDetail !== null) {
@@ -28,14 +40,14 @@ const Cart = () => {
         })
       );
       setTimeout(() => {
-        dispatch(getUserCart());
+        dispatch(getUserCart(config2));
       }, 200);
     }
   }, [productUpdateDetail]);
   const deleteACartProduct = (id) => {
-    dispatch(deleteCartProduct(id));
+    dispatch(deleteCartProduct({id:id, config2:config2}));
     setTimeout(() => {
-      dispatch(getUserCart());
+      dispatch(getUserCart(config2));
     }, 200);
   };
   useEffect(() => {
@@ -102,14 +114,14 @@ const Cart = () => {
                         <input
                           className="form-control"
                           type="number"
-                          name=""
+                          name={"quantity"+item?._id}
                           min={1}
                           max={10}
-                          id=""
+                          id={"cart"+item?._id}
                           value={
-                            productUpdateDetail?.quantity
-                              ? productUpdateDetail?.quantity
-                              : item?.quantity
+                            // productUpdateDetail?.quantity
+                            //   ? productUpdateDetail?.quantity: 
+                              item?.quantity
                           }
                           onChange={(e) => {
                             setProductUpdateDetail({
@@ -128,7 +140,7 @@ const Cart = () => {
                         />
                       </div>
                     </div>
-                    <div className="cart-col-14">
+                    <div className="cart-col-4">
                       <h5 className="price">
                         Rs. {item?.price * item?.quantity}
                       </h5>

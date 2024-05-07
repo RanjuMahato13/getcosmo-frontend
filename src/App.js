@@ -25,6 +25,8 @@ import { PrivateRoutes } from "./routing/PrivateRoutes";
 import { OpenRoutes } from "./routing/OpenRoutes";
 import Orders from "./pages/Orders";
 import Profile from "./pages/Profile";
+import Sugggestion from "./pages/Suggestion";
+
 function App() {
   return (
     <>
@@ -105,6 +107,7 @@ function App() {
               element={<DeliveryInformation />}
             />
             <Route path="terms-conditions" element={<TermsAndConditions />} />
+            <Route path="suggestion" element={<Sugggestion />} />
           </Route>
         </Routes>
       </BrowserRouter>
