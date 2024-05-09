@@ -26,6 +26,7 @@ import { OpenRoutes } from "./routing/OpenRoutes";
 import Orders from "./pages/Orders";
 import Profile from "./pages/Profile";
 import Sugggestion from "./pages/Suggestion";
+import Faq from "./pages/Faq";
 
 function App() {
   return (
@@ -108,6 +109,7 @@ function App() {
             />
             <Route path="terms-conditions" element={<TermsAndConditions />} />
             <Route path="suggestion" element={<Sugggestion />} />
+            <Route path="faq" element={<Faq />} />
           </Route>
         </Routes>
       </BrowserRouter>
