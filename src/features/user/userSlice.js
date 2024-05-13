@@ -104,7 +104,7 @@ export const updateCartProduct = createAsyncThunk(
 );
 export const updateProfile = createAsyncThunk(
   "user/profile/update",
-  async (data,thunkAPI) => {
+  async (data, thunkAPI) => {
     try {
       return await authService.updateUser(data);
     } catch (error) {
@@ -220,8 +220,8 @@ export const authSlice = createSlice({
         state.isError = false;
         state.isSuccess = true;
         state.cartProduct = action.payload;
-        if(state.isSuccess) {
-          toast.success("Product Added to Cart")
+        if (state.isSuccess) {
+          toast.success("Product Added to Cart");
         }
       })
       .addCase(AddProdToCart.rejected, (state, action) => {
@@ -254,7 +254,7 @@ export const authSlice = createSlice({
         state.isSuccess = true;
         state.deletedCartProduct = action.payload;
         if (state.isSuccess) {
-          toast.success("Product Deleted From Cart Successfully!")
+          toast.success("Product Deleted From Cart Successfully!");
         }
       })
       .addCase(deleteCartProduct.rejected, (state, action) => {
@@ -263,7 +263,7 @@ export const authSlice = createSlice({
         state.isSuccess = false;
         state.message = action.error;
         if (state.isSuccess === false) {
-          toast.error("Something Went Wrong!")
+          toast.error("Something Went Wrong!");
         }
       })
       .addCase(updateCartProduct.pending, (state) => {
@@ -275,7 +275,7 @@ export const authSlice = createSlice({
         state.isSuccess = true;
         state.updatedCartProduct = action.payload;
         if (state.isSuccess) {
-          toast.success("Product Updated From Cart Successfully!")
+          toast.success("Product Updated From Cart Successfully!");
         }
       })
       .addCase(updateCartProduct.rejected, (state, action) => {
@@ -284,7 +284,7 @@ export const authSlice = createSlice({
         state.isSuccess = false;
         state.message = action.error;
         if (state.isSuccess === false) {
-          toast.error("Something Went Wrong!")
+          toast.error("Something Went Wrong!");
         }
       })
       .addCase(createAnOrder.pending, (state) => {
@@ -294,9 +294,10 @@ export const authSlice = createSlice({
         state.isLoading = false;
         state.isError = false;
         state.isSuccess = true;
-        state.orderedProduct = action.payload;
+        state.orderedProduct = action.payload.order;
+        state.payment_url = action.payload.payment_url;
         if (state.isSuccess) {
-          toast.success("Ordered Created Successfully!")
+          toast.success("Ordered Created Successfully!");
         }
       })
       .addCase(createAnOrder.rejected, (state, action) => {
@@ -305,7 +306,7 @@ export const authSlice = createSlice({
         state.isSuccess = false;
         state.message = action.error;
         if (state.isSuccess === false) {
-          toast.error("Something Went Wrong!")
+          toast.error("Something Went Wrong!");
         }
       })
       .addCase(getOrders.pending, (state) => {
@@ -331,20 +332,19 @@ export const authSlice = createSlice({
         state.isError = false;
         state.isSuccess = true;
         state.updatedUser = action.payload;
-        
-          let currentUserData =JSON.parse(localStorage.getItem("customer"))
-          let newUserData = {
-            _id: currentUserData?._id,
-            token: currentUserData.token,
-            firstname: action?.payload?.firstname,
-            lastname: action?.payload?.lastname,
-            email: action?.payload?.email,
-            mobile: action?.payload?.mobile,
-          }
-          localStorage.setItem("customer", JSON.stringify(newUserData))
-          state.user = newUserData;
-          toast.success("Profile Updated Successfully!")
-        
+
+        let currentUserData = JSON.parse(localStorage.getItem("customer"));
+        let newUserData = {
+          _id: currentUserData?._id,
+          token: currentUserData.token,
+          firstname: action?.payload?.firstname,
+          lastname: action?.payload?.lastname,
+          email: action?.payload?.email,
+          mobile: action?.payload?.mobile,
+        };
+        localStorage.setItem("customer", JSON.stringify(newUserData));
+        state.user = newUserData;
+        toast.success("Profile Updated Successfully!");
       })
       .addCase(updateProfile.rejected, (state, action) => {
         state.isLoading = false;
@@ -352,7 +352,7 @@ export const authSlice = createSlice({
         state.isSuccess = false;
         state.message = action.error;
         if (state.isSuccess === false) {
-          toast.error("Something Went Wrong!")
+          toast.error("Something Went Wrong!");
         }
       })
       .addCase(forgotPasswordToken.pending, (state) => {
@@ -364,7 +364,7 @@ export const authSlice = createSlice({
         state.isSuccess = true;
         state.token = action.payload;
         if (state.isSuccess) {
-          toast.success(" Forgot Password Email Sent Successfully!")
+          toast.success(" Forgot Password Email Sent Successfully!");
         }
       })
       .addCase(forgotPasswordToken.rejected, (state, action) => {
@@ -373,7 +373,7 @@ export const authSlice = createSlice({
         state.isSuccess = false;
         state.message = action.error;
         if (state.isSuccess === false) {
-          toast.error("Something Went Wrong!")
+          toast.error("Something Went Wrong!");
         }
       })
       .addCase(resetPassword.pending, (state) => {
@@ -385,7 +385,7 @@ export const authSlice = createSlice({
         state.isSuccess = true;
         state.pass = action.payload;
         if (state.isSuccess) {
-          toast.success("Password Updated Successfully!")
+          toast.success("Password Updated Successfully!");
         }
       })
       .addCase(resetPassword.rejected, (state, action) => {
@@ -394,7 +394,7 @@ export const authSlice = createSlice({
         state.isSuccess = false;
         state.message = action.error;
         if (state.isSuccess === false) {
-          toast.error("Something Went Wrong!")
+          toast.error("Something Went Wrong!");
         }
       })
       .addCase(deleteUserCart.pending, (state) => {
