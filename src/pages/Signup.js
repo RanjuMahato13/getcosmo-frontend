@@ -20,7 +20,7 @@ const signUpSchema = yup.object({
   password: yup.string().required("Password is Required"),
 });
 const Signup = () => {
-  const authState = useSelector(state => state.auth)
+  const authState = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const formik = useFormik({
@@ -37,10 +37,10 @@ const Signup = () => {
     },
   });
   useEffect(() => {
-   if (authState.createdUser !== null && authState.isError  ===false ) {
-    navigate('/login')
-   }
-  }, [authState])
+    if (authState.createdUser && !authState.isError) {
+      navigate("/login");
+    }
+  }, [authState]);
   return (
     <>
       <Meta title={"Sign Up"} />

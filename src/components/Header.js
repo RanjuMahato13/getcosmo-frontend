@@ -20,20 +20,20 @@ const Header = () => {
 
   const [total, setTotal] = useState(null);
   const getTokenFromLocalStorage = localStorage.getItem("customer")
-  ? JSON.parse(localStorage.getItem("customer"))
-  : null;
+    ? JSON.parse(localStorage.getItem("customer"))
+    : null;
 
-const config2 = {
-  headers: {
-    Authorization: `Bearer ${
-      getTokenFromLocalStorage !== null ? getTokenFromLocalStorage.token : ""
-    }`,
-    Accept: "application/json",
-  },
-};
-useEffect(() => {
-  dispatch(getUserCart(config2))
-}, [])
+  const config2 = {
+    headers: {
+      Authorization: `Bearer ${
+        getTokenFromLocalStorage !== null ? getTokenFromLocalStorage.token : ""
+      }`,
+      Accept: "application/json",
+    },
+  };
+  useEffect(() => {
+    dispatch(getUserCart(config2));
+  }, []);
   useEffect(() => {
     let sum = 0;
     for (let index = 0; index < cartState?.length; index++) {
@@ -92,7 +92,9 @@ useEffect(() => {
           <div className="row align-items-center">
             <div className="col-2">
               <h2>
-                <Link className="text-white">GetCosmo</Link>
+                <Link className="text-white" to="/">
+                  GetCosmo
+                </Link>
               </h2>
             </div>
             <div className="col-5">
@@ -188,7 +190,7 @@ useEffect(() => {
                       data-bs-toggle="dropdown"
                       aria-expanded="false"
                     >
-                      Product catagories
+                      Product categories
                     </button>
                     <ul
                       className="dropdown-menu"

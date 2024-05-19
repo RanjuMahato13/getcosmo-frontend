@@ -18,6 +18,7 @@ import { addToWishlist } from "../features/products/productSlice";
 const Home = () => {
   const blogState = useSelector((state) => state?.blog?.blog);
   const productState = useSelector((state) => state.product.product);
+  const isLoading = useSelector((state) => state.product.isLoading);
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
@@ -192,12 +193,16 @@ const Home = () => {
                 return (
                   <div key={index} className={"col-3"}>
                     <div className="product-card position-relative">
-                      <div className="wishlist-icon position-absolute">
+                      <div
+                        className="wishlist-icon position-absolute"
+                        role="buttom"
+                      >
                         <button
                           className="border-0 bg-transparent"
                           onClick={(e) => {
                             addToWish(item?._id);
                           }}
+                          disabled={isLoading}
                         >
                           <img src="images/wish.svg" alt="wishlist" />
                         </button>
@@ -298,12 +303,16 @@ const Home = () => {
                 return (
                   <div key={index} className={"col-3"}>
                     <div className="product-card position-relative">
-                      <div className="wishlist-icon position-absolute">
+                      <div
+                        className="wishlist-icon position-absolute"
+                        role="button"
+                      >
                         <button
                           className="border-0 bg-transparent"
                           onClick={(e) => {
                             addToWish(item?._id);
                           }}
+                          disabled={isLoading}
                         >
                           <img src="images/wish.svg" alt="wishlist" />
                         </button>
